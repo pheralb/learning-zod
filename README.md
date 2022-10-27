@@ -1,13 +1,19 @@
 <hr />
 
 **Template:**
-- [Introduction](#🪐-introduction).
-- [Getting Started](#👨‍🚀-getting-started).
-- [Requests](#🚀-requests).
+
+- [Introduction](#-introduction).
+- [Getting Started](#-getting-started).
+- [Requests](#-requests).
 
 **Snippets:**
-- [Validations](#✔️-validations).
-- [Zod Error](#📚-zod-error).
+
+- [Validations](#-validations).
+- [Zod Error](#-zod-error).
+
+**Tutorials:**
+
+- [Typescript REST API Validations with Zod by Fazt Code](https://youtu.be/TAVaAxWmzSg).
 
 <hr />
 
@@ -24,6 +30,7 @@ This repository includes a **REST api template** created with:
 - **Express**: 4.18.2
 - **Typescript**: 4.8.4
 - **ts-node-dev**: 2.0.0
+- **tsconfig-paths**: 4.1.0
 - **Zod**: 3.19.1
 - **SWC**: 0.1.57 (cli) & 1.3.11 (core).
 
@@ -60,25 +67,185 @@ By default, learning-zod is running on the port `3000`. You can change the port 
 
 ## 🚀 Requests
 
-| -   | Method   | Url    | Query Parameters                                       |
-| --- | -------- | ------ | ------------------------------------------------------ |
-| 📋  | **POST** | /login | `{email: "hello@world.com", password:"mypassword123"}` |
-| 📋  | **GET**  | Text   | -                                                      |
+| -   | Method   | Url                             | -           | Query Parameters                                       |
+| --- | -------- | ------------------------------- | ----------- | ------------------------------------------------------ |
+| 📋  | **POST** | /login                          | Body - Json | `{email: "hello@world.com", password:"mypassword123"}` |
+| 📋  | **PUT**  | /products/1232?title=helloworld | Body - Json | `{name: "iPhone", price:900}`                          |
 
 ## ✔️ Validations
 
 ### Login example schema:
 
 ```ts
-const loginSchema = z.object({
-  email: z.string().email({
-    message: "Write a correct email address",
-  }),
-  password: z.string().min(6, {
-    message: "Password too short",
+export const loginSchema = z.object({
+  body: z.object({
+    email: z.string().email({
+      message: "Write a correct email address",
+    }),
+    password: z.string().min(6, {
+      message: "Password too short",
+    }),
   }),
 });
 ```
+
+<details>
+<summary>🤔 Test 1 - Method: POST.</summary>
+
+**URL**: http://localhost:3000/login
+
+- JSON body:
+
+```json
+{
+  "email": 11,
+  "password": []
+}
+```
+
+- Response:
+
+```json
+[
+  {
+    "field": ["email"],
+    "message": "Expected string, received number"
+  },
+  {
+    "field": ["password"],
+    "message": "Expected string, received array"
+  }
+]
+```
+
+</details>
+
+<details>
+<summary>🤔 Test 2 - Method: POST.</summary>
+
+**URL**: http://localhost:3000/login
+
+- JSON body:
+
+```json
+{
+  "email": "abc",
+  "password": "123456gg"
+}
+```
+
+- Response:
+
+```json
+[
+  {
+    "field": ["email"],
+    "message": "Write a correct email address"
+  }
+]
+```
+
+</details>
+
+### Product example schema:
+
+```ts
+const productSchema = z.object({
+  name: z.string().min(3, { message: "Name too short" }),
+  price: z.number().min(0, { message: "Price must be positive" }),
+});
+```
+
+<details>
+<summary>🤔 Test 1 - Method: POST.</summary>
+
+**URL**: http://localhost:3000/products
+
+- JSON body:
+
+```json
+{}
+```
+
+- Response:
+
+```json
+[
+  {
+    "field": ["name"],
+    "message": "Required"
+  },
+  {
+    "field": ["price"],
+    "message": "Required"
+  }
+]
+```
+
+</details>
+
+<details>
+<summary>🤔 Test 2 - Method: POST.</summary>
+
+**URL**: http://localhost:3000/products
+
+- JSON body:
+
+```json
+{
+  "name": "iPhone",
+  "price": "33"
+}
+```
+
+- Response:
+
+```json
+[
+  {
+    "field": ["price"],
+    "message": "Expected number, received string"
+  }
+]
+```
+
+</details>
+
+### Update product example schema:
+
+```ts
+export const updateSchema = z.object({
+  name: z.string(),
+  price: z.number().min(0, { message: "Price must be positive" }).optional(),
+});
+```
+
+<details>
+<summary>🤔 Test 1 - Method: PUT.</summary>
+
+**URL**: http://localhost:3000/products/1
+
+- JSON body:
+
+```json
+{
+  "name": "iPhone",
+  "price": 30
+}
+```
+
+- Response:
+
+```json
+[
+  {
+    "field": ["params", "id"],
+    "message": "String must contain at least 3 character(s)"
+  }
+]
+```
+
+</details>
 
 ## 📚 Zod Error:
 
@@ -106,3 +273,7 @@ If we introduce a **number** in _username_ field, Zod returns the following:
   "name": "ZodError"
 }
 ```
+
+## 🔑 License
+
+- [MIT](https://github.com/pheralb/learning-zod/blob/main/LICENSE).
