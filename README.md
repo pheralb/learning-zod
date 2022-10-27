@@ -1,7 +1,7 @@
 <div align="center">
 
-<img src="./assets/logo.svg" width="100px">
-<p><h2>Learning Zod</h2></p>
+<img src="./assets/logo.svg" width="130px">
+<h1>Learning Zod</h1>
 
 ![GitHub stars](https://img.shields.io/github/stars/pheralb/learning-zod)
 ![GitHub issues](https://img.shields.io/github/issues/pheralb/learning-zod)
@@ -9,8 +9,6 @@
 [![Required Node.JS +16](https://img.shields.io/static/v1?label=node&message=16&logo=node.js&color=3f893e)](https://nodejs.org/about/releases)
 
 </div>
-
-<hr />
 
 **Template:**
 
