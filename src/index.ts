@@ -1,42 +1,14 @@
 import express from "express";
-import { z, ZodError } from "zod";
+import authRoutes from "@/routes/auth.routes";
+import productRoutes from "@/routes/products.routes";
 
 const app = express();
 
-// Set the port here =>
-const port = 3000;
-
-// Routes =>
-const loginSchema = z.object({
-  email: z.string().email({
-    message: "Write a correct email address",
-  }),
-  password: z.string().min(6, {
-    message: "Password too short",
-  }),
-});
-
+const port = 3000; // Set the port here.
 app.use(express.json());
 
-app.post("/login", (req, res) => {
-  try {
-    loginSchema.parse(req.body);
-    res.send("login");
-  } catch (error) {
-    if (error instanceof ZodError) {
-      console.log("❌ Zod validation error [/login]. Check response.");
-      return res.status(400).json(
-        error.issues.map((issue) => ({
-          field: issue.path,
-          message: issue.message,
-        }))
-      );
-    } else {
-      console.log("❌ Internal error [/login]. Check response.");
-      return res.status(500).json(error);
-    }
-  }
-});
+app.use(authRoutes);
+app.use(productRoutes);
 
 // Initial server =>
 app.listen(port);
