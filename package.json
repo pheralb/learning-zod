@@ -1,0 +1,30 @@
+{
+  "name": "learning-zod",
+  "author": "@pheralb_",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "REST API built with Zod + Express & Typescript.",
+  "keywords": [
+    "zod",
+    "typescript",
+    "schema",
+    "validation",
+    "tutorial"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build-tsc": "npx tsc"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "zod": "3.19.1"
+  },
+  "devDependencies": {
+    "@swc/cli": "0.1.57",
+    "@swc/core": "1.3.11",
+    "@types/express": "4.17.14",
+    "ts-node-dev": "2.0.0",
+    "typescript": "4.8.4"
+  }
+}
